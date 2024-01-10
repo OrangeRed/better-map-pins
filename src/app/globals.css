@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .leaflet-container {
-	@apply bg-[#222222];
+	background: #222222 !important;
 }

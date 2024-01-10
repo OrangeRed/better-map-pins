@@ -42,8 +42,7 @@ function parseGoogleResponse(rawInput: string) {
 		} satisfies Results
 	})
 
-	// return locations
-	return locations.slice(0, 3)
+	return locations
 }
 
 export default parseGoogleResponse
