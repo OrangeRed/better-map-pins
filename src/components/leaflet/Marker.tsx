@@ -1,69 +1,86 @@
 'use client'
 
-import { useContext, useEffect, useRef, useState } from 'react'
-import { LeafletMapContext } from './Map'
-
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import L, { type LatLngTuple } from 'leaflet'
-
-import { FaFlag } from 'react-icons/fa'
+import { Marker, MarkerProps } from 'react-leaflet'
 
 import cn from '@/lib/cn'
 
-type LeafletMarkerProps = {
-	latLng: LatLngTuple
-	name?: string | null
-} & React.AnchorHTMLAttributes<HTMLAnchorElement>
+type CustomMarkerProps = {
+	name?: string | null // TODO Add real data
+	position: LatLngTuple
+	icon: MarkerProps['icon'] | ReactElement
+} & Omit<MarkerProps, 'icon' | 'position'>
 
-const query = 'Dumbo'
+function CustomMarker({ name, position, icon: _icon, children, ...props }: CustomMarkerProps) {
+	const iconRef = useRef<HTMLAnchorElement | null>(null)
+	const [icon, setIcon] = useState(_icon)
 
-function Marker({ latLng, name, className, ...props }: LeafletMarkerProps) {
-	const mapCtx = useContext(LeafletMapContext)
-
-	const markerElementRef = useRef<HTMLAnchorElement | null>(null)
-	const [marker, setMarker] = useState<L.Marker | null>(null)
+	const markerRef = useRef<L.Marker | null>(null)
 
 	useEffect(() => {
-		if (!mapCtx) return
-		if (markerElementRef.current === null) return
+		if (iconRef.current === null) return
 
-		const map = mapCtx.map
+		const label = iconRef.current.lastElementChild
+		const offset = label ? label.scrollWidth - 24 : 0
 
-		const icon = L.divIcon({
-			className: cn('map-marker'),
-			html: markerElementRef.current,
-			iconSize: L.point(28, 28),
-			popupAnchor: L.point(0, -12)
+		const divIcon = L.divIcon({
+			className: cn('map-marker [&>*]:opacity-100'),
+			html: iconRef.current,
+			iconSize: L.point(24, 24),
+			popupAnchor: L.point(offset / 2, -12)
 		})
 
-		const markerRef = L.marker(latLng, { icon, keyboard: false }).addTo(map)
+		setIcon(divIcon)
+	}, [iconRef])
 
-		setMarker(markerRef)
-		mapCtx.setMap(map)
-
-		return () => {
-			markerRef.remove()
-		}
-	}, [markerElementRef, mapCtx, latLng])
+	// Render jsx icon to grab the reference to its html
+	if (icon && !(icon instanceof L.DivIcon) && !(icon instanceof L.Icon)) {
+		return (
+			<a
+				ref={iconRef}
+				className="relative flex items-center rounded-full opacity-0"
+				href={`https://www.google.com/maps/search/?api=1&query=${
+					name?.replaceAll(' ', '+') ?? position.join(',')
+				}`}
+				target="_blank"
+			>
+				<>
+					{icon}
+					<span className="absolute left-0 whitespace-nowrap pl-7 text-base font-semibold text-orange-400">
+						{name}
+					</span>
+					{/* // TODO Switch directions when the label overlaps another node */}
+					{/* <span className="absolute right-0 pr-7 whitespace-nowrap text-base font-semibold text-orange-400">
+						{name}
+					</span> */}
+				</>
+			</a>
+		)
+	}
 
 	return (
-		<a
-			ref={markerElementRef}
-			className={cn('relative flex h-full w-full items-center rounded-full', className ?? '')}
-			href={`https://www.google.com/maps/search/?api=1&query=${query ?? latLng.join(',')}`}
-			target="_blank"
+		<Marker
+			ref={markerRef}
+			position={position}
+			icon={icon}
+			eventHandlers={{
+				mouseover: (e) => {
+					if (markerRef.current === null) return
+
+					markerRef.current.openPopup(e.latlng)
+				},
+				mouseout: () => {
+					if (markerRef.current === null) return
+
+					markerRef.current.closePopup()
+				}
+			}}
 			{...props}
 		>
-			{marker && (
-				// TODO Switch to a different way of rendering svgs to handle dynamic changes
-				<>
-					<FaFlag className="h-full w-full rounded-full border-2 border-white bg-green-600 fill-white p-1 shadow shadow-black" />
-					<span className="absolute ml-8 whitespace-nowrap text-base font-semibold text-green-600">
-						{name ?? latLng.join(' ')}
-					</span>
-				</>
-			)}
-		</a>
+			{children}
+		</Marker>
 	)
 }
 
-export default Marker
+export default CustomMarker
