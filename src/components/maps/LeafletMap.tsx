@@ -3,8 +3,8 @@
 import L, { type LatLngTuple } from 'leaflet'
 import { useEffect, useState } from 'react'
 
-import Map from '@/components/Map'
-import Marker from '@/components/Marker'
+import Map from '@/components/leaflet/Map'
+import Marker from '@/components/leaflet/Marker'
 import { type GoogleResponse } from '@/lib/parseGoogleResponse'
 
 const INITIAL_VIEW: LatLngTuple = [40.7026493, -73.991899] // Dumbo

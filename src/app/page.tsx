@@ -7,7 +7,7 @@ import parseGoogleResponse from '@/lib/parseGoogleResponse'
 export default async function Home() {
 	const LeafletMap = useMemo(
 		() =>
-			dynamic(() => import('@/maps/LeafletMap'), {
+			dynamic(() => import('@/components/maps/LeafletMap'), {
 				loading: () => <MapLoading />,
 				ssr: false
 			}),
