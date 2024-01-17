@@ -4,7 +4,7 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import L, { type LatLngTuple } from 'leaflet'
 import { Marker, MarkerProps } from 'react-leaflet'
 
-import cn from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 type CustomMarkerProps = {
 	name?: string | null // TODO Add real data

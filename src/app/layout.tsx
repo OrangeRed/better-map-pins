@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import cn from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 import 'leaflet/dist/leaflet.css'
 import './globals.css'

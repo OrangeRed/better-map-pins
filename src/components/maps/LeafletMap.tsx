@@ -1,16 +1,25 @@
 'use client'
 
+import { useState } from 'react'
+import { cn, createContext } from '@/lib/utils'
+
 import { type LatLngTuple } from 'leaflet'
-import { MapContainer, Popup, TileLayer } from 'react-leaflet'
+import { MapContainer, Popup } from 'react-leaflet'
 import Cluster from 'react-leaflet-cluster'
 import Marker from '@/components/leaflet/Marker'
+import ThemeSwitch from '@/components/leaflet/ThemeSwitch'
+import Tiles, { type TileProviders } from '@/components/leaflet/Tiles'
 
 import { FaCoffee } from 'react-icons/fa'
 
 import { type GoogleResponse } from '@/lib/parseGoogleResponse'
 
-const INITIAL_VIEW: LatLngTuple = [40.7026493, -73.991899] // Dumbo
-const INITIAL_ZOOM = 12
+export const ThemeContext = createContext<ReturnType<typeof ContextState>>()
+
+const ContextState = () => {
+	const [theme, setTheme] = useState<TileProviders>('cartoDark')
+	return { theme, setTheme }
+}
 
 type LeafletMapProps = {
 	initialView?: LatLngTuple
@@ -19,54 +28,64 @@ type LeafletMapProps = {
 }
 
 function LeafletMap({
-	initialView = INITIAL_VIEW,
-	initialZoom = INITIAL_ZOOM,
+	initialView = [40.7026493, -73.991899], // Dumbo
+	initialZoom = 12,
 	locations
 }: LeafletMapProps) {
-	return (
-		<MapContainer
-			className="h-full w-full bg-[#222222]"
-			center={initialView}
-			keyboard={false}
-			zoom={initialZoom}
-		>
-			<TileLayer
-				url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-				attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-				minZoom={0}
-				maxZoom={20}
-			/>
+	const { theme, setTheme } = ContextState()
 
-			<Cluster
-				// iconCreateFunction={}
-				chunkedLoading
-				maxClusterRadius={60}
-				showCoverageOnHover={false}
-				removeOutsideVisibleBounds
+	return (
+		<ThemeContext.Provider value={{ theme, setTheme }}>
+			<div
+				className={cn(
+					'h-full w-full',
+					theme === 'cartoDark' && '[&>.leaflet-container]:bg-[#222222]'
+				)}
 			>
-				{locations.map((location, idx) => {
-					if (location.coords) {
-						return (
-							<Marker
-								key={`marker-${idx}`}
-								name={location.name}
-								position={location.coords}
-								keyboard={false}
-								riseOnHover
-								// TODO Switch to a different way of rendering icon to handle dynamic changes
-								icon={
-									<div className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-blue-800 shadow shadow-black">
-										<FaCoffee className="fill-white" />
-									</div>
-								}
-							>
-								<Popup>{location.name ?? ''}</Popup>
-							</Marker>
-						)
-					}
-				})}
-			</Cluster>
-		</MapContainer>
+				<MapContainer
+					className="h-full w-full"
+					center={initialView}
+					keyboard={false}
+					zoom={initialZoom}
+					attributionControl={false}
+					fadeAnimation
+				>
+					<Tiles provider={theme} />
+					<ThemeSwitch />
+
+					<Cluster
+						// iconCreateFunction={}
+						animate
+						chunkedLoading
+						maxClusterRadius={60}
+						showCoverageOnHover={false}
+						removeOutsideVisibleBounds
+					>
+						{locations.map((location, idx) => {
+							if (location.coords) {
+								return (
+									<Marker
+										key={`marker-${idx}`}
+										name={location.name}
+										position={location.coords}
+										keyboard={false}
+										riseOnHover
+										// TODO Switch to a different way of rendering icon to handle dynamic changes
+										icon={
+											<div className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-blue-800 shadow shadow-black">
+												<FaCoffee className="fill-white"></FaCoffee>
+											</div>
+										}
+									>
+										<Popup>{location.name ?? ''}</Popup>
+									</Marker>
+								)
+							}
+						})}
+					</Cluster>
+				</MapContainer>
+			</div>
+		</ThemeContext.Provider>
 	)
 }
 
