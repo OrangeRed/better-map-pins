@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 
 import 'leaflet/dist/leaflet.css'
 import './globals.css'
+import Navbar from '@/components/ui/Navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,7 +21,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
-			<body className={cn('h-screen w-screen', inter.className)}>{children}</body>
+			<body className={cn('flex h-screen w-screen flex-col', inter.className)}>
+				<Navbar />
+				{children}
+			</body>
 		</html>
 	)
 }

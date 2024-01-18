@@ -18,10 +18,8 @@ export default async function Home() {
 	const data = parseGoogleResponse(file)
 
 	return (
-		<main className="h-screen w-full">
-			<section className="h-full w-full bg-red-900 p-4">
-				<LeafletMap locations={data} />
-			</section>
+		<main className="h-full w-full">
+			<LeafletMap locations={data} />
 		</main>
 	)
 }
