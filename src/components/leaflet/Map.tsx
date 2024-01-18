@@ -3,7 +3,7 @@
 import { createContext, useEffect, useRef, useState } from 'react'
 import L, { type LatLngTuple } from 'leaflet'
 
-import cn from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 type LeafletMapContextType = {
 	map: L.Map

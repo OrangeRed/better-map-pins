@@ -4,11 +4,11 @@ import { useState } from 'react'
 import { cn, createContext } from '@/lib/utils'
 
 import { type LatLngTuple } from 'leaflet'
-import { MapContainer, Popup } from 'react-leaflet'
+import { MapContainer, Popup, ZoomControl } from 'react-leaflet'
 import Cluster from 'react-leaflet-cluster'
 import Marker from '@/components/leaflet/Marker'
 import ThemeSwitch from '@/components/leaflet/ThemeSwitch'
-import Tiles, { type TileProviders } from '@/components/leaflet/Tiles'
+import TileProvider, { type TileProviders } from '@/components/leaflet/TileProvider'
 
 import { FaCoffee } from 'react-icons/fa'
 
@@ -45,13 +45,15 @@ function LeafletMap({
 				<MapContainer
 					className="h-full w-full"
 					center={initialView}
-					keyboard={false}
 					zoom={initialZoom}
 					attributionControl={false}
-					fadeAnimation
+					keyboard={false}
+					zoomControl={false}
 				>
-					<Tiles provider={theme} />
-					<ThemeSwitch />
+					<TileProvider provider={theme} />
+
+					<ZoomControl position="bottomright" />
+					<ThemeSwitch position="bottomleft" />
 
 					<Cluster
 						// iconCreateFunction={}

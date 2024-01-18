@@ -14,7 +14,7 @@ const POSITION_CLASSES = {
 	topright: 'leaflet-top leaflet-right'
 } as const
 
-function ThemeSwitch({ position = 'bottomleft' }: { position?: keyof typeof POSITION_CLASSES }) {
+function ThemeSwitch({ position }: { position: keyof typeof POSITION_CLASSES }) {
 	const { theme, setTheme } = useContext(ThemeContext)
 
 	return (

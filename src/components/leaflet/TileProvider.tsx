@@ -1,4 +1,4 @@
-import { TileLayer, TileLayerProps, useMap } from 'react-leaflet'
+import { TileLayer, TileLayerProps } from 'react-leaflet'
 
 // Other providers: https://leaflet-extras.github.io/leaflet-providers/preview/
 export const TILE_PROVIDERS = {
@@ -34,8 +34,8 @@ export const TILE_PROVIDERS = {
 
 export type TileProviders = keyof typeof TILE_PROVIDERS
 
-function Tiles({ provider }: { provider: TileProviders }) {
+function TileProvider({ provider }: { provider: TileProviders }) {
 	return <TileLayer {...TILE_PROVIDERS[provider]} />
 }
 
-export default Tiles
+export default TileProvider
