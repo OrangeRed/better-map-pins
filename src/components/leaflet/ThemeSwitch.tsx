@@ -4,7 +4,7 @@ import { cn, useContext } from '@/lib/utils'
 import { ThemeContext } from '@/components/maps/LeafletMap'
 
 import { Toggle } from '@/components/ui/Toggle'
-import { MoonStarIcon, SunIcon } from 'lucide-react'
+import { SunIcon, MoonIcon } from '@radix-ui/react-icons'
 
 // Classes used by Leaflet to position controls
 const POSITION_CLASSES = {
@@ -23,6 +23,7 @@ function ThemeSwitch({ position = 'bottomleft' }: { position?: keyof typeof POSI
 				<Toggle
 					aria-label="Toggle between light mode and dark mode"
 					className={cn(
+						'h-11 w-12 [&>svg]:scale-150',
 						theme === 'cartoDark' && 'bg-white text-black ring-offset-black',
 						theme === 'cartoLight' && 'data-[state=on]:bg-black data-[state=on]:text-white'
 					)}
@@ -30,7 +31,7 @@ function ThemeSwitch({ position = 'bottomleft' }: { position?: keyof typeof POSI
 						setTheme((prevTheme) => (prevTheme === 'cartoDark' ? 'cartoLight' : 'cartoDark'))
 					}}
 				>
-					{theme === 'cartoDark' ? <SunIcon className="scale-110" /> : <MoonStarIcon />}
+					{theme === 'cartoDark' ? <SunIcon /> : <MoonIcon />}
 				</Toggle>
 			</div>
 		</div>
