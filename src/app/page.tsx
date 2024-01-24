@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 
 import fs from 'fs'
 import parseGoogleResponse from '@/lib/parseGoogleResponse'
+import { getUsers } from '@/server/actions'
 
 export default async function Home() {
 	const LeafletMap = useMemo(
@@ -16,6 +17,9 @@ export default async function Home() {
 
 	const file = fs.readFileSync('./public/f.txt').toString()
 	const data = parseGoogleResponse(file)
+
+	const users = await getUsers()
+	console.log(users)
 
 	return (
 		<main className="h-full w-full">

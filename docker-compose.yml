@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  sqld:
+    # https://github.com/tursodatabase/libsql/blob/main/Dockerfile
+    image: ghcr.io/libsql/sqld:main
+    container_name: db-nextjs-maps
+    environment:
+      SQLD_NODE: primary
+      # MYSQL_DATABASE: database # Replace with your desired database name
+      # MYSQL_USER: user # Replace with your desired MySQL username
+      # MYSQL_PASSWORD: password # Replace with your desired MySQL password
+      # MYSQL_ROOT_PASSWORD: password # Replace with your desired root password
+    ports:
+      - '5001:5001' # <Port exposed> : <MySQL Port running inside container>
+      - '8080:8080'
+    expose:
+      - '5001'
+      - '8080'
+    volumes:
+      - sqld_data:/var/lib/sqld
+
+volumes:
+  sqld_data:
+    driver: local
