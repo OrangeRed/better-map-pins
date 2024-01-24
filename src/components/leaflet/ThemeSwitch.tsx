@@ -3,7 +3,7 @@
 import { cn, useContext } from '@/lib/utils'
 import { ThemeContext } from '@/components/maps/LeafletMap'
 
-import { Toggle } from '@/components/ui/Toggle'
+import { Toggle } from '@/components/ui/toggle'
 import { SunIcon, MoonIcon } from '@radix-ui/react-icons'
 
 // Classes used by Leaflet to position controls
