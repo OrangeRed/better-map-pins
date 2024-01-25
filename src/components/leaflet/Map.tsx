@@ -1,16 +1,17 @@
 'use client'
 
-import { createContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import L, { type LatLngTuple } from 'leaflet'
 
 import { cn } from '@/lib/utils'
+import { createContext } from '@/lib/hooks'
 
 type LeafletMapContextType = {
 	map: L.Map
 	setMap: (map: L.Map) => void
 }
 
-export const LeafletMapContext = createContext<LeafletMapContextType | null>(null)
+export const LeafletMapContext = createContext<LeafletMapContextType>()
 
 type LeafletMapProps = {
 	initialView: LatLngTuple

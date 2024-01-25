@@ -1,6 +1,7 @@
 'use client'
 
-import { cn, useContext } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+import { useContext } from '@/lib/hooks'
 import { ThemeContext } from '@/components/maps/LeafletMap'
 
 import { Toggle } from '@/components/ui/toggle'
