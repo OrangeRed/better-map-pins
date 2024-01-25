@@ -1,7 +1,8 @@
+import Link from 'next/link'
 import { getServerSession } from 'next-auth'
 import { nextAuthOptions } from '@/lib/auth'
 
-import Link from 'next/link'
+import { GitHubLogoIcon, HamburgerMenuIcon, PersonIcon } from '@radix-ui/react-icons'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
 import {
@@ -13,11 +14,8 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger
-} from '@/components/ui/sheet'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
-import { GitHubLogoIcon, HamburgerMenuIcon, PersonIcon } from '@radix-ui/react-icons'
-import SignoutButton from './auth/SignoutButton'
-import { SigninDialog } from './auth/SigninDialog'
+} from './ui/sheet'
+import UserAvatar from './UserAvatar'
 
 function SheetDemo() {
 	return (
@@ -61,10 +59,8 @@ function SheetDemo() {
 export default async function Navbar() {
 	const session = await getServerSession(nextAuthOptions)
 
-	console.log(session?.user)
-
 	return (
-		<header className="absolute z-[1000] grid w-full grid-cols-3 border-b-2 border-b-orange-700 bg-[#222222] bg-opacity-60 p-2 backdrop-blur-sm">
+		<header className="absolute z-[1000] grid w-full grid-cols-3 border-b-2 border-b-orange-700 bg-[#222222]/60 p-2 backdrop-blur-sm">
 			<SheetDemo />
 			<p className="self-center text-center text-slate-100">Better Map Pins</p>
 			<div className="flex justify-end gap-x-4">
@@ -80,41 +76,20 @@ export default async function Navbar() {
 					</Link>
 				</Button>
 
-				<HoverCard openDelay={0}>
-					<HoverCardTrigger asChild>
-						<Button
-							size="icon"
-							variant="ghost"
-							className="rounded-full bg-transparent hover:bg-black"
-						>
-							<Avatar className="transition-opacity hover:opacity-80">
-								{session?.user ? (
-									<>
-										<AvatarImage src={session.user.image ?? ''} referrerPolicy="no-referrer" />
-										<AvatarFallback className="bg-transparent text-slate-100">
-											{session.user.name?.slice(0, 2)}
-										</AvatarFallback>
-									</>
-								) : (
-									<PersonIcon className="m-auto h-3/5 w-3/5 self-center text-slate-100" />
-								)}
-							</Avatar>
-						</Button>
-					</HoverCardTrigger>
-					<HoverCardContent className="mr-1 mt-2.5 flex flex-col gap-y-2">
+				<UserAvatar>
+					<Avatar className="transition-opacity hover:opacity-80">
 						{session?.user ? (
 							<>
-								<p className="text-center">{session.user.email}</p>
-								<SignoutButton />
+								<AvatarImage src={session.user.image ?? ''} referrerPolicy="no-referrer" />
+								<AvatarFallback className="bg-transparent text-slate-100">
+									{session.user.email?.slice(0, 2).toUpperCase()}
+								</AvatarFallback>
 							</>
 						) : (
-							<SigninDialog />
-							// <Button asChild>
-							// 	<Link href="api/auth/signin">Sign in</Link>
-							// </Button>
+							<PersonIcon className="m-auto h-3/5 w-3/5 self-center text-slate-100" />
 						)}
-					</HoverCardContent>
-				</HoverCard>
+					</Avatar>
+				</UserAvatar>
 			</div>
 		</header>
 	)
