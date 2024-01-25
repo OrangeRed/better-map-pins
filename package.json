@@ -7,6 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
+		"format": "prettier . --write",
 		"drizzle:studio": "drizzle-kit studio",
 		"drizzle:generate": "drizzle-kit generate:sqlite",
 		"drizzle:introspect": "drizzle-kit introspect:sqlite",
