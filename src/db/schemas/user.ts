@@ -1,4 +1,6 @@
-import { integer, sqliteTable, text, primaryKey } from 'drizzle-orm/sqlite-core'
+import { relations } from 'drizzle-orm'
+import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { mapPins, sourcesToUsers } from '.'
 
 export const users = sqliteTable('user', {
 	id: text('id').notNull().primaryKey(),
@@ -7,6 +9,11 @@ export const users = sqliteTable('user', {
 	emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
 	image: text('image')
 })
+
+export const usersRelation = relations(users, ({ many }) => ({
+	usersToSources: many(sourcesToUsers),
+	pins: many(mapPins)
+}))
 
 export const accounts = sqliteTable(
 	'account',

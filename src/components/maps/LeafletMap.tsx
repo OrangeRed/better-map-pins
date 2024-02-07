@@ -80,7 +80,7 @@ function LeafletMap({
 											</div>
 										}
 									>
-										<Popup>{location.name ?? ''}</Popup>
+										<Popup>{location.name ?? ''}'s additional content information</Popup>
 									</Marker>
 								)
 							}
