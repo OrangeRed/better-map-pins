@@ -7,10 +7,6 @@ services:
     container_name: db-nextjs-maps
     environment:
       SQLD_NODE: primary
-      # MYSQL_DATABASE: database # Replace with your desired database name
-      # MYSQL_USER: user # Replace with your desired MySQL username
-      # MYSQL_PASSWORD: password # Replace with your desired MySQL password
-      # MYSQL_ROOT_PASSWORD: password # Replace with your desired root password
     ports:
       - '5001:5001' # <Port exposed> : <MySQL Port running inside container>
       - '8080:8080'
